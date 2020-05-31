@@ -44,13 +44,14 @@ public interface ObjectInspector extends Cloneable {
 
   /**
    * Category.
-   *
+   * 数据结构，LIST
    */
   public static enum Category {
     PRIMITIVE, LIST, MAP, STRUCT, UNION
   };
 
   /**
+   * 得到类型名称如list int map int,string
    * Returns the name of the data type that is inspected by this
    * ObjectInspector. This is used to display the type information to the user.
    *
@@ -61,6 +62,7 @@ public interface ObjectInspector extends Cloneable {
   String getTypeName();
 
   /**
+   * 得到对应数据结构
    * An ObjectInspector must inherit from one of the following interfaces if
    * getCategory() returns: PRIMITIVE: PrimitiveObjectInspector LIST:
    * ListObjectInspector MAP: MapObjectInspector STRUCT: StructObjectInspector.

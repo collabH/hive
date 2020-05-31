@@ -53,6 +53,9 @@ import org.apache.hive.common.util.AnnotationUtils;
 @UDFType(deterministic = true)
 public abstract class GenericUDAFEvaluator implements Closeable {
 
+  /**
+   * 聚合类型
+   */
   @InterfaceAudience.Public
   @InterfaceStability.Stable
   @Retention(RetentionPolicy.RUNTIME)
@@ -127,7 +130,7 @@ public abstract class GenericUDAFEvaluator implements Closeable {
   /**
    * Initialize the evaluator.
    *
-   * @param m
+   * @param m 聚合类型
    *          The mode of aggregation.
    * @param parameters
    *          The ObjectInspector for the parameters: In PARTIAL1 and COMPLETE
@@ -182,6 +185,7 @@ public abstract class GenericUDAFEvaluator implements Closeable {
   }
 
   /**
+   * 返回一个用于存储中间聚合结果的对象
    * Get a new aggregation object.
    */
   public abstract AggregationBuffer getNewAggregationBuffer() throws HiveException;
@@ -234,6 +238,7 @@ public abstract class GenericUDAFEvaluator implements Closeable {
   }
 
   /**
+   * 将一行新的数据载入到聚合buffer中
    * Iterate through original data.
    *
    * @param parameters

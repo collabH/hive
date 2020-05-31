@@ -25,6 +25,7 @@ import org.apache.hadoop.hive.serde2.typeinfo.TypeInfo;
 
 /**
  * GenericUDAFCollectSet
+ * collect_set的聚合函数
  */
 @Description(name = "collect_set", value = "_FUNC_(x) - Returns a set of objects with duplicate elements eliminated")
 public class GenericUDAFCollectSet extends AbstractGenericUDAFResolver {
@@ -35,10 +36,12 @@ public class GenericUDAFCollectSet extends AbstractGenericUDAFResolver {
   @Override
   public GenericUDAFEvaluator getEvaluator(TypeInfo[] parameters)
       throws SemanticException {
+    //如果参数不为1抛出参数类型异常
     if (parameters.length != 1) {
       throw new UDFArgumentTypeException(parameters.length - 1,
           "Exactly one argument is expected.");
     }
+    //如果部位set类型终止操作
     switch (parameters[0].getCategory()) {
       case PRIMITIVE:
       case STRUCT:
@@ -50,6 +53,7 @@ public class GenericUDAFCollectSet extends AbstractGenericUDAFResolver {
             "Only primitive, struct, list or map type arguments are accepted but "
                 + parameters[0].getTypeName() + " was passed as parameter 1.");
     }
+    //返回GenericUDAFMkCollectionEvaluator，创建Set提取器
     return new GenericUDAFMkCollectionEvaluator(BufferType.SET);
   }
 

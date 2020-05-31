@@ -30,6 +30,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructField;
 import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 
 /**
+ * 一个通用的用户自定义表生成函数
  * A Generic User-defined Table Generating Function (UDTF)
  *
  * Generates a variable number of output rows for a single input row. Useful for
@@ -38,6 +39,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.StructObjectInspector;
 @InterfaceAudience.Public
 @InterfaceStability.Stable
 public abstract class GenericUDTF {
+  //存放返回数据
   Collector collector = null;
 
   /**

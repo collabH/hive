@@ -33,7 +33,9 @@ public class UDTFCollector implements Collector {
    * @see
    * org.apache.hadoop.hive.ql.udf.generic.Collector#collect(java.lang.Object)
    */
+  //udtp操作符存储数据
   final UDTFOperator op;
+  //计数器
   private transient int counter;
 
   public UDTFCollector(UDTFOperator op) {
@@ -42,6 +44,7 @@ public class UDTFCollector implements Collector {
 
   @Override
   public void collect(Object input) throws HiveException {
+    //存储数据
     op.forwardUDTFOutput(input);
     counter++;
   }

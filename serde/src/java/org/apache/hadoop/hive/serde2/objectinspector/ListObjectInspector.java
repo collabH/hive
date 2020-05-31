@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * ListObjectInspector.
- *
+ *集合对象检查器
  */
 @InterfaceAudience.Public
 @InterfaceStability.Stable
@@ -39,14 +39,15 @@ public interface ListObjectInspector extends ObjectInspector {
    */
   Object getListElement(Object data, int index);
 
-  /**
+   /**
+    * 得到集合长度，如果为-1代表为null
    * returns -1 for data = null.
    */
   int getListLength(Object data);
 
   /**
    * returns null for data = null.
-   * 
+   *
    * Note: This method should not return a List object that is reused by the
    * same ListObjectInspector, because it's possible that the same
    * ListObjectInspector will be used in multiple places in the code.

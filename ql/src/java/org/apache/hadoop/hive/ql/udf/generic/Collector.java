@@ -29,6 +29,7 @@ import org.apache.hadoop.hive.ql.metadata.HiveException;
 @InterfaceStability.Stable
 public interface Collector {
   /**
+   * 其他类将会调用collect方法存数据
    * Other classes will call collect() with the data that it has.
    * 
    * @param input

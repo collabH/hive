@@ -234,7 +234,7 @@ public abstract class Operator<T extends OperatorDesc> implements Serializable,C
   // object inspectors for input rows
   // We will increase the size of the array on demand
   protected transient ObjectInspector[] inputObjInspectors = new ObjectInspector[1];
-  // for output rows of this operator
+  // for output rows of this operator这个操作输出行
   protected transient ObjectInspector outputObjInspector;
 
   /**
@@ -871,13 +871,21 @@ public abstract class Operator<T extends OperatorDesc> implements Serializable,C
     return 10 * cntr;
   }
 
+  /**
+   * 过过滤器
+   * @param row
+   * @param rowInspector
+   * @throws HiveException
+   */
   protected void forward(Object row, ObjectInspector rowInspector)
       throws HiveException {
+    //处理行数
     runTimeNumRows++;
+    //是否处理完毕
     if (getDone()) {
       return;
     }
-
+    //子操作符
     int childrenDone = 0;
     for (int i = 0; i < childOperatorsArray.length; i++) {
       Operator<? extends OperatorDesc> o = childOperatorsArray[i];

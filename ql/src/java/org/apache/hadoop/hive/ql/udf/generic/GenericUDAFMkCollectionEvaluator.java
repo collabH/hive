@@ -31,6 +31,9 @@ import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorFactory;
 import org.apache.hadoop.hive.serde2.objectinspector.ObjectInspectorUtils;
 import org.apache.hadoop.hive.serde2.objectinspector.StandardListObjectInspector;
 
+/**
+ * 通用的udaf收集器
+ */
 public class GenericUDAFMkCollectionEvaluator extends GenericUDAFEvaluator
     implements Serializable {
 
@@ -38,14 +41,17 @@ public class GenericUDAFMkCollectionEvaluator extends GenericUDAFEvaluator
 
   enum BufferType { SET, LIST }
 
+  //输入对象
   // For PARTIAL1 and COMPLETE: ObjectInspectors for original data
   private transient ObjectInspector inputOI;
   // For PARTIAL2 and FINAL: ObjectInspectors for partial aggregations (list
   // of objs)
   private transient StandardListObjectInspector loi;
 
+  //内部合并数据结构
   private transient ListObjectInspector internalMergeOI;
 
+  //转换类型，支持set和list对应collect_set、collet_list
   private BufferType bufferType;
 
   //needed by kyro
@@ -56,6 +62,18 @@ public class GenericUDAFMkCollectionEvaluator extends GenericUDAFEvaluator
     this.bufferType = bufferType;
   }
 
+  /**
+   * hive调用初始化一个UDAF evaluator类
+   * @param m
+   *          The mode of aggregation.
+   * @param parameters
+   *          The ObjectInspector for the parameters: In PARTIAL1 and COMPLETE
+   *          mode, the parameters are original data; In PARTIAL2 and FINAL
+   *          mode, the parameters are just partial aggregations (in that case,
+   *          the array will always have a single element).
+   * @return
+   * @throws HiveException
+   */
   @Override
   public ObjectInspector init(Mode m, ObjectInspector[] parameters)
       throws HiveException {
@@ -82,8 +100,12 @@ public class GenericUDAFMkCollectionEvaluator extends GenericUDAFEvaluator
   }
 
 
+  /**
+   * 数据聚合缓存
+   */
   class MkArrayAggregationBuffer extends AbstractAggregationBuffer {
 
+    //输出数据
     private Collection<Object> container;
 
     public MkArrayAggregationBuffer() {
@@ -113,15 +135,17 @@ public class GenericUDAFMkCollectionEvaluator extends GenericUDAFEvaluator
   public void iterate(AggregationBuffer agg, Object[] parameters)
       throws HiveException {
     assert (parameters.length == 1);
+    //得到传入参数
     Object p = parameters[0];
 
     if (p != null) {
       MkArrayAggregationBuffer myagg = (MkArrayAggregationBuffer) agg;
+      //数据迭代塞入集合容器
       putIntoCollection(p, myagg);
     }
   }
 
-  //mapside
+  //mapside，提取一部分数据塞入新的list中
   @Override
   public Object terminatePartial(AggregationBuffer agg) throws HiveException {
     MkArrayAggregationBuffer myagg = (MkArrayAggregationBuffer) agg;
@@ -136,6 +160,7 @@ public class GenericUDAFMkCollectionEvaluator extends GenericUDAFEvaluator
     MkArrayAggregationBuffer myagg = (MkArrayAggregationBuffer) agg;
     List<Object> partialResult = (List<Object>) internalMergeOI.getList(partial);
     if (partialResult != null) {
+      //便利数据加入集合中
       for(Object i : partialResult) {
         putIntoCollection(i, myagg);
       }

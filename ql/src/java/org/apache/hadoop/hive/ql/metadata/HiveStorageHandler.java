@@ -38,6 +38,7 @@ import org.apache.hadoop.mapred.OutputFormat;
 import java.util.Map;
 
 /**
+ * 定义一个可插拔的接口用于添加新的存储处理器。一个存储处理器需要指定如下东西
  * HiveStorageHandler defines a pluggable interface for adding
  * new storage handlers to Hive.  A storage handler consists of
  * a bundle of the following:

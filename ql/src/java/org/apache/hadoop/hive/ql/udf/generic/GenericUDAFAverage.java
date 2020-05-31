@@ -62,7 +62,7 @@ import org.apache.hadoop.util.StringUtils;
 
 /**
  * GenericUDAFAverage.
- *
+ * 自定义UDAF参考此函数
  */
 @Description(name = "avg", value = "_FUNC_(x) - Returns the mean of a set of numbers")
 public class GenericUDAFAverage extends AbstractGenericUDAFResolver {

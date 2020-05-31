@@ -55,6 +55,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 public final class OpenCSVSerde extends AbstractSerDe {
 
   public static final Logger LOG = LoggerFactory.getLogger(OpenCSVSerde.class.getName());
+  //将记录转换成Hive可以访问的对象
   private ObjectInspector inspector;
   private String[] outputFields;
   private int numCols;
